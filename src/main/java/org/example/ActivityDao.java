@@ -69,4 +69,14 @@ public class ActivityDao {
 
         return activityModel;
     }
+
+    public void delete(ActivityModel activityModel){
+        LOGGER.info("delete(" + activityModel + ")");
+        SessionManager sessionManager = SessionManager.getSessionManager();
+        Session session = sessionManager.getSessionFactory().openSession();
+        session.getTransaction().begin();
+        session.remove(activityModel);
+        session.getTransaction().commit();
+        LOGGER.info("delete(...) = " + activityModel);
+    }
 }
