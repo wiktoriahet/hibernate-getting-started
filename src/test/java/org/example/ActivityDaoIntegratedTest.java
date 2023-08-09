@@ -54,4 +54,18 @@ class ActivityDaoIntegratedTest {
         );
 
     }
+
+    @Test
+    void createAndDelete() {
+        //given
+        ActivityDao activityDao = new ActivityDao();
+        ActivityModel createActivityModel = new ActivityModel();
+
+        //when
+        ActivityModel createdActivityModel = activityDao.create(createActivityModel);
+        activityDao.delete(createActivityModel);
+
+        //then
+
+    }
 }

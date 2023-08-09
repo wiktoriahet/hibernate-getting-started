@@ -43,4 +43,14 @@ public class UserDao{
         return userModel;
     }
 
+    public void delete(UserModel userModel){
+        LOGGER.info("delete(" + userModel + ")");
+        SessionManager sessionManager = SessionManager.getSessionManager();
+        Session session = sessionManager.getSessionFactory().openSession();
+        session.getTransaction().begin();
+        session.remove(userModel);
+        session.getTransaction().commit();
+        LOGGER.info("delete(...) = " + userModel);
+    }
+
 }
