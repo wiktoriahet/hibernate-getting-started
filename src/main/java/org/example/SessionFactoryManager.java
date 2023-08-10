@@ -7,13 +7,13 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import java.util.logging.Logger;
 
-public class SessionManager {
+public class SessionFactoryManager {
 
-    private static final Logger LOGGER = Logger.getLogger(SessionManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(SessionFactoryManager.class.getName());
+    private static SessionFactoryManager INSTANCE;
     private SessionFactory sessionFactory;
-    private static SessionManager sessionManager = null;
 
-    private SessionManager() {
+    private SessionFactoryManager() {
         StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .configure("hibernate.cfg.xml")
                 .build();
@@ -28,16 +28,24 @@ public class SessionManager {
         }
     }
 
-    public static SessionManager getSessionManager(){
-        LOGGER.info("getSessionFactory()");
-        if (sessionManager == null) {
-            sessionManager = new SessionManager();
+    public static SessionFactoryManager getInstance() {
+        LOGGER.info("getInstance()");
+        if (INSTANCE == null) {
+            INSTANCE = new SessionFactoryManager();
         }
-        LOGGER.info("getSessionFactory(...)");
-        return sessionManager;
+        LOGGER.info("getInstance(...) = " + INSTANCE);
+        return INSTANCE;
     }
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
+
+//    public Session openSession() {
+//        if (sessionFactory != null) {
+//            return sessionFactory.openSession();
+//        }
+//
+//        return null;
+//    }
 }

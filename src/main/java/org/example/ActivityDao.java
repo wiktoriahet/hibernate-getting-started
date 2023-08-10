@@ -1,18 +1,25 @@
 package org.example;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ActivityDao {
 
     private static final Logger LOGGER = Logger.getLogger(ActivityDao.class.getName());
+//    private static final SessionFactoryManager SESSION_MANAGER = SessionFactoryManager.getInstance();
+
+    private static final SessionFactory SESSION_FACTORY;
+
+    static {
+        SESSION_FACTORY = SessionFactoryManager.getInstance().getSessionFactory();
+    }
+
 // TODO: 09.08.2023 tu??
-    //SessionManager sessionManager = SessionManager.getSessionManager();
+    //SessionManager sessionManager = SessionManager.getInstance();
 
 //    private SessionFactory sessionFactory;
 //
@@ -34,9 +41,9 @@ public class ActivityDao {
     public ActivityModel create(ActivityModel activityModel) {
         LOGGER.info("create(" + activityModel + ")");
         // TODO: 09.08.2023 czy tu??
-        SessionManager sessionManager = SessionManager.getSessionManager();
+        //SessionManager sessionManager = SessionManager.getInstance();
         //Session session = sessionFactory.openSession();
-        Session session = sessionManager.getSessionFactory().openSession();
+        Session session = SESSION_FACTORY.openSession();
         session.getTransaction().begin();
         session.persist(activityModel);
         session.getTransaction().commit();
@@ -45,11 +52,11 @@ public class ActivityDao {
         return activityModel;
     }
 
-    public ActivityModel read(Long id){
+    public ActivityModel read(Long id) {
         LOGGER.info("read(" + id + ")");
-        SessionManager sessionManager = SessionManager.getSessionManager();
+        //SessionManager sessionManager = SessionManager.getInstance();
         //Session session = sessionFactory.openSession();
-        Session session = sessionManager.getSessionFactory().openSession();
+        Session session = SESSION_FACTORY.openSession();
         session.getTransaction().begin();
         ActivityModel activityModel = session.get(ActivityModel.class, id);
         session.getTransaction().commit();
@@ -58,10 +65,10 @@ public class ActivityDao {
         return activityModel;
     }
 
-    public ActivityModel update(ActivityModel activityModel){
+    public ActivityModel update(ActivityModel activityModel) {
         LOGGER.info("update(" + activityModel + ")");
-        SessionManager sessionManager = SessionManager.getSessionManager();
-        Session session = sessionManager.getSessionFactory().openSession();
+        //SessionManager sessionManager = SessionManager.getInstance();
+        Session session = SESSION_FACTORY.openSession();
         session.getTransaction().begin();
         session.merge(activityModel);
         session.getTransaction().commit();
@@ -70,13 +77,29 @@ public class ActivityDao {
         return activityModel;
     }
 
-    public void delete(ActivityModel activityModel){
+    public boolean delete(ActivityModel activityModel) {
         LOGGER.info("delete(" + activityModel + ")");
-        SessionManager sessionManager = SessionManager.getSessionManager();
-        Session session = sessionManager.getSessionFactory().openSession();
-        session.getTransaction().begin();
-        session.remove(activityModel);
-        session.getTransaction().commit();
+        boolean deleted;
+
+        //SessionManager sessionManager = SessionManager.getInstance();
+        Session session = SESSION_FACTORY.openSession();
+        try {
+            session.getTransaction().begin();
+            session.remove(activityModel);
+            session.getTransaction().commit();
+
+            deleted = true;
+            return deleted;
+        } catch (HibernateException e) {
+            LOGGER.log(Level.SEVERE, "Error while deleting Activity", e);
+            deleted = false;
+            session.getTransaction().rollback();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error while deleting Activity", e);
+            deleted = false;
+            session.getTransaction().rollback();
+        }
         LOGGER.info("delete(...) = " + activityModel);
+        return deleted;
     }
 }

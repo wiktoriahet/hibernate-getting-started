@@ -1,13 +1,7 @@
 package org.example;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 public class UserDao{
@@ -33,8 +27,8 @@ public class UserDao{
 
     public UserModel create(UserModel userModel) {
         LOGGER.info("create(" + userModel + ")");
-        SessionManager sessionManager = SessionManager.getSessionManager();
-        Session session = sessionManager.getSessionFactory().openSession();
+        SessionFactoryManager sessionFactoryManager = SessionFactoryManager.getInstance();
+        Session session = sessionFactoryManager.getSessionFactory().openSession();
         session.getTransaction().begin();
         session.persist(userModel);
         session.getTransaction().commit();
@@ -45,8 +39,8 @@ public class UserDao{
 
     public void delete(UserModel userModel){
         LOGGER.info("delete(" + userModel + ")");
-        SessionManager sessionManager = SessionManager.getSessionManager();
-        Session session = sessionManager.getSessionFactory().openSession();
+        SessionFactoryManager sessionFactoryManager = SessionFactoryManager.getInstance();
+        Session session = sessionFactoryManager.getSessionFactory().openSession();
         session.getTransaction().begin();
         session.remove(userModel);
         session.getTransaction().commit();
