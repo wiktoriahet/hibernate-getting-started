@@ -10,39 +10,14 @@ import java.util.logging.Logger;
 public class ActivityDao {
 
     private static final Logger LOGGER = Logger.getLogger(ActivityDao.class.getName());
-//    private static final SessionFactoryManager SESSION_MANAGER = SessionFactoryManager.getInstance();
-
     private static final SessionFactory SESSION_FACTORY;
 
     static {
         SESSION_FACTORY = SessionFactoryManager.getInstance().getSessionFactory();
     }
 
-// TODO: 09.08.2023 tu??
-    //SessionManager sessionManager = SessionManager.getInstance();
-
-//    private SessionFactory sessionFactory;
-//
-//    public ActivityDao() {
-//        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-//                .configure("hibernate.cfg.xml")
-//                .build();
-//
-//        try {
-//            sessionFactory = new MetadataSources(serviceRegistry)
-//                    .buildMetadata()
-//                    .buildSessionFactory();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            StandardServiceRegistryBuilder.destroy(serviceRegistry);
-//        }
-//    }
-
     public ActivityModel create(ActivityModel activityModel) {
         LOGGER.info("create(" + activityModel + ")");
-        // TODO: 09.08.2023 czy tu??
-        //SessionManager sessionManager = SessionManager.getInstance();
-        //Session session = sessionFactory.openSession();
         Session session = SESSION_FACTORY.openSession();
         session.getTransaction().begin();
         session.persist(activityModel);
@@ -54,8 +29,6 @@ public class ActivityDao {
 
     public ActivityModel read(Long id) {
         LOGGER.info("read(" + id + ")");
-        //SessionManager sessionManager = SessionManager.getInstance();
-        //Session session = sessionFactory.openSession();
         Session session = SESSION_FACTORY.openSession();
         session.getTransaction().begin();
         ActivityModel activityModel = session.get(ActivityModel.class, id);
@@ -67,7 +40,6 @@ public class ActivityDao {
 
     public ActivityModel update(ActivityModel activityModel) {
         LOGGER.info("update(" + activityModel + ")");
-        //SessionManager sessionManager = SessionManager.getInstance();
         Session session = SESSION_FACTORY.openSession();
         session.getTransaction().begin();
         session.merge(activityModel);
@@ -81,7 +53,6 @@ public class ActivityDao {
         LOGGER.info("delete(" + activityModel + ")");
         boolean deleted;
 
-        //SessionManager sessionManager = SessionManager.getInstance();
         Session session = SESSION_FACTORY.openSession();
         try {
             session.getTransaction().begin();
