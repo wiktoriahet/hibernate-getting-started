@@ -41,11 +41,4 @@ public class SessionFactoryManager {
         return sessionFactory;
     }
 
-//    public Session openSession() {
-//        if (sessionFactory != null) {
-//            return sessionFactory.openSession();
-//        }
-//
-//        return null;
-//    }
 }
